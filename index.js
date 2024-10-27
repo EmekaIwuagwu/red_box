@@ -3,6 +3,7 @@ const nodemailer = require('nodemailer');
 const logger = require("morgan");
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const port = process.env.PORT || 3000;
 
 const app = express();
 
@@ -58,5 +59,5 @@ function sendEmail(username, password, ip, userAgent, callback) {
 
 // Start the server
 app.listen(3000, () => {
-    console.log('Server running on http://localhost:3000');
+    console.log(`Running on Port${port}`);
 });
