@@ -1,5 +1,6 @@
 const express = require('express');
 const nodemailer = require('nodemailer');
+const logger = require("morgan");
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
