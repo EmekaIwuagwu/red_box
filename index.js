@@ -11,7 +11,8 @@ const app = express();
 app.use(cors({
     origin: '*', // Allow all origins; change this for production
     methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'X-Requested-With']
+    allowedHeaders: ['Content-Type', 'X-Requested-With'],
+    credentials: true
 }));
 
 app.use(logger("dev"));
